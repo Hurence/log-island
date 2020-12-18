@@ -1,3 +1,5 @@
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FHurence%2Flogisland.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FHurence%2Flogisland?ref=badge_shield)
+
 Logisland
 =========
 
@@ -261,3 +263,7 @@ Contributing
 ------------
 
 Please review the `Contribution to Logisland guide <http://logisland.readthedocs.io/en/latest/developer.html>`_ for information on how to get started contributing to the project.
+
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FHurence%2Flogisland.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FHurence%2Flogisland?ref=badge_large)
