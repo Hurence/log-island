@@ -469,7 +469,7 @@ err-code@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/err-code/-/err-code-1.1.1.tgz#739d71b6851f24d050ea18c79a5b722420771d59"
 
-es5-ext@^0.10.22, es5-ext@^0.10.7, es5-ext@^0.10.9, es5-ext@~0.10.21, es5-ext@~0.10.2:
+es5-ext@^0.10.22, es5-ext@^0.10.7, es5-ext@^0.10.9, es5-ext@~0.10.2, es5-ext@~0.10.21:
   version "0.10.23"
   resolved "https://registry.yarnpkg.com/es5-ext/-/es5-ext-0.10.23.tgz#a390ab717bde1ce3b4cbaeabe23ca8fbddcb06f6"
   dependencies:
@@ -1123,8 +1123,8 @@ lodash.pick@^4.2.1:
   resolved "https://registry.yarnpkg.com/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
 
 lodash@^4.2.0:
-  version "4.17.4"
-  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
+  version "4.17.21"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
 
 longest@^1.0.1:
   version "1.0.1"
