@@ -60,6 +60,7 @@ public class WebSession
         WebSession webSession = new WebSession(record, fieldsNames);
         webSession.setFirstEvent(eventTimestamp);
         webSession.setLastEvent(eventTimestamp);
+        webSession.setIsSinglePageVisit(true);
         return webSession;
     }
 
@@ -98,7 +99,8 @@ public class WebSession
             String key = field.getName();
             String value = field.asString();
             if (value != null) {
-                if (fieldsNames.getIsSessionActiveField().equals(key)) {
+                if (fieldsNames.getIsSessionActiveField().equals(key)
+                 || fieldsNames.getIsSinglePageVisit().equals(key)) {
                     record.setField(key, FieldType.BOOLEAN, Boolean.valueOf(value));
                 } else if (fieldsNames.getSessionDurationField().equals(key)
                         || fieldsNames.getEventsCounterField().equals(key)
@@ -202,6 +204,10 @@ public class WebSession
         this.record.setField(fieldsNames.lastEventEpochSecondsField, FieldType.LONG, eventTimestamp / 1000);
     }
 
+    public void setIsSinglePageVisit(final Boolean isSinglePageVisit) {
+        this.record.setField(fieldsNames.isSinglePageVisit, FieldType.BOOLEAN, isSinglePageVisit);
+    }
+
     public static class InternalFields {
         private String timestampField;
         private String sessionIdField;
@@ -222,6 +228,7 @@ public class WebSession
 
         private String userIdField;
 
+        private String isSinglePageVisit;
         private String isSessionActiveField;
         private String sessionInactivityDurationField;
         private String sessionDurationField;
@@ -344,6 +351,15 @@ public class WebSession
 
         public InternalFields setUserIdField(String userIdField) {
             this.userIdField = userIdField;
+            return this;
+        }
+
+        public String getIsSinglePageVisit() {
+            return isSinglePageVisit;
+        }
+
+        public InternalFields setIsSinglePageVisit(String isSinglePageVisit) {
+            this.isSinglePageVisit = isSinglePageVisit;
             return this;
         }
 

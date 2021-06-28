@@ -254,6 +254,15 @@ public class IncrementalWebSession
                     .defaultValue("lastVisitedPage")
                     .build();
 
+    public static final PropertyDescriptor IS_SINGLE_PAGE_VISIT_FIELD =
+            new PropertyDescriptor.Builder()
+                    .name("isSinglePageVisit.out.field")
+                    .description("the name of the field stating whether the session is single page visit or not => will override default value if set")
+                    .required(true)
+                    .addValidator(StandardValidators.NON_EMPTY_VALIDATOR)
+                    .defaultValue("is_single_page_visit")
+                    .build();
+        
     public static final PropertyDescriptor IS_SESSION_ACTIVE_FIELD =
             new PropertyDescriptor.Builder()
                     .name("isSessionActive.out.field")
@@ -473,6 +482,7 @@ public class IncrementalWebSession
                 FIELDS_TO_RETURN,
                 FIRST_VISITED_PAGE_FIELD,
                 LAST_VISITED_PAGE_FIELD,
+                IS_SINGLE_PAGE_VISIT_FIELD,
                 IS_SESSION_ACTIVE_FIELD,
                 SESSION_DURATION_FIELD,
                 SESSION_INACTIVITY_DURATION_FIELD,
@@ -528,6 +538,7 @@ public class IncrementalWebSession
         final String _USERID_FIELD = context.getPropertyValue(USER_ID_FIELD).asString();
         final String _FIRST_VISITED_PAGE_FIELD = context.getPropertyValue(FIRST_VISITED_PAGE_FIELD).asString();
         final String _LAST_VISITED_PAGE_FIELD = context.getPropertyValue(LAST_VISITED_PAGE_FIELD).asString();
+        String _IS_SINGLE_PAGE_VISIT = context.getPropertyValue(IS_SINGLE_PAGE_VISIT_FIELD).asString();
         String _IS_SESSION_ACTIVE_FIELD = context.getPropertyValue(IS_SESSION_ACTIVE_FIELD).asString();
         String _SESSION_DURATION_FIELD = context.getPropertyValue(SESSION_DURATION_FIELD).asString();
         String _EVENTS_COUNTER_FIELD = context.getPropertyValue(EVENTS_COUNTER_FIELD).asString();
@@ -604,7 +615,8 @@ public class IncrementalWebSession
                 .setLastEventEpochSecondsField(_LAST_EVENT_EPOCH_SECONDS_FIELD)
                 .setLastVisitedPageField(_LAST_VISITED_PAGE_FIELD)
                 .setTransactionIdsField(_TRANSACTION_IDS)
-                .setUserIdField(_USERID_FIELD);
+                .setUserIdField(_USERID_FIELD)
+                .setIsSinglePageVisit(_IS_SINGLE_PAGE_VISIT);
 
         this.zoneIdToUse = ZoneId.systemDefault();
         if (context.getPropertyValue(ZONEID_CONF).isSet()) {

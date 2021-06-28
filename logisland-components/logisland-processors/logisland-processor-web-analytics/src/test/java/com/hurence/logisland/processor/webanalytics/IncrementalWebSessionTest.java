@@ -1001,6 +1001,7 @@ public class IncrementalWebSessionTest {
         runner.setProperty(IncrementalWebSession.USER_ID_FIELD, "Userid");
         runner.setProperty(IncrementalWebSession.SESSION_INACTIVITY_TIMEOUT_CONF, String.valueOf(SESSION_TIMEOUT_SECONDS));
         runner.setProperty(IncrementalWebSession.FIELDS_TO_RETURN, FIELDS_TO_RETURN);
+        runner.setProperty(IncrementalWebSession.IS_SINGLE_PAGE_VISIT_FIELD, "is_single_page_visit");
         return runner;
     }
 

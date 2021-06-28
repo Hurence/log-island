@@ -16,11 +16,23 @@
 
 package com.hurence.logisland.serializer;
 
-import com.hurence.logisland.record.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Properties;
+
+import com.hurence.logisland.record.Field;
+import com.hurence.logisland.record.FieldType;
 import com.hurence.logisland.record.Record;
-import io.confluent.kafka.schemaregistry.client.MockSchemaRegistryClient;
-import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
-import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
+import com.hurence.logisland.record.StandardRecord;
 
 import org.apache.avro.JsonProperties;
 import org.apache.avro.Schema;
@@ -31,22 +43,17 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.confluent.kafka.schemaregistry.ParsedSchema;
+import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.MockSchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.SchemaRegistryClient;
+import io.confluent.kafka.schemaregistry.client.rest.RestService;
+import io.confluent.kafka.schemaregistry.client.rest.entities.SchemaReference;
+import io.confluent.kafka.schemaregistry.client.rest.exceptions.RestClientException;
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import io.confluent.kafka.serializers.KafkaAvroSerializerConfig;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
-
-import io.confluent.kafka.schemaregistry.client.CachedSchemaRegistryClient;
 
 public class ConfluentSerializer implements RecordSerializer {
 
@@ -73,7 +80,10 @@ public class ConfluentSerializer implements RecordSerializer {
 
   public SchemaRegistryClient getSchemaRegistryClient() {
     if (schemaRegistryClient == null) {
-      schemaRegistryClient = new CachedSchemaRegistryClient(registryUrl, 10);
+      Properties defaultConfig = new Properties();
+      defaultConfig.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, this.registryUrl);
+      defaultConfig.put(AbstractKafkaSchemaSerDeConfig.BASIC_AUTH_CREDENTIALS_SOURCE, AbstractKafkaSchemaSerDeConfig.BASIC_AUTH_CREDENTIALS_SOURCE_DEFAULT);
+      schemaRegistryClient = new CachedSchemaRegistryClient(new RestService(registryUrl), 10, new HashMap(defaultConfig));
     }
     return schemaRegistryClient;
   }
@@ -81,7 +91,8 @@ public class ConfluentSerializer implements RecordSerializer {
   public KafkaAvroSerializer getSerializer() {
     if (serializer == null) {
       Properties defaultConfig = new Properties();
-      defaultConfig.put(KafkaAvroSerializerConfig.SCHEMA_REGISTRY_URL_CONFIG, this.registryUrl);
+      defaultConfig.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, this.registryUrl);
+      defaultConfig.put(KafkaAvroSerializerConfig.AUTO_REGISTER_SCHEMAS, KafkaAvroSerializerConfig.AUTO_REGISTER_SCHEMAS_DEFAULT);
       serializer = new KafkaAvroSerializer(getSchemaRegistryClient(), new HashMap(defaultConfig));
     }
     return serializer;
@@ -102,7 +113,8 @@ public class ConfluentSerializer implements RecordSerializer {
       schemaRegistryClient = schemaRegistryClientMock;
       registryUrl = "bogus";
       Schema schema = parser.parse(inputStream);
-      getSchemaRegistryClient().register("logisland_events", schema);
+      Optional<ParsedSchema> parsedSchema = schemaRegistryClient.parseSchema(null, schema.toString(true), new LinkedList<SchemaReference>());
+      getSchemaRegistryClient().register("logisland_events", parsedSchema.get());
     } catch (Exception e) {
       logger.error("Error initalizing schema registry", e);
       throw new RuntimeException(e);

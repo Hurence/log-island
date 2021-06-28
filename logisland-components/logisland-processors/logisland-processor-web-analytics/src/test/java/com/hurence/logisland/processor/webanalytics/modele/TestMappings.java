@@ -42,5 +42,6 @@ public class TestMappings {
                 .setLastEventEpochSecondsField("lastEventEpochSeconds")
                 .setLastVisitedPageField("lastVisitedPage")
                 .setTransactionIdsField("transactionIds")
-                .setUserIdField("Userid");
+                .setUserIdField("Userid")
+                .setIsSinglePageVisit("isSinglePageVisit");
 }
