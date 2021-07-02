@@ -68,7 +68,7 @@
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>2.4.0</version>
+            <version>6.8.15</version>
         </dependency>
 
         <!-- scala deps -->
